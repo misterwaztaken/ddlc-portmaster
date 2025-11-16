@@ -9,7 +9,10 @@ XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 # Locate the PortMaster control folder
 if [ -d "/opt/system/Tools/PortMaster/" ]; then
     controlfolder="/opt/system/Tools/PortMaster"
-# ... [Other PortMaster controlfolder logic remains here] ...
+elif [ -d "/opt/tools/PortMaster/" ]; then
+    controlfolder="/opt/tools/PortMaster"
+elif [ -d "$XDG_DATA_HOME/PortMaster/" ]; then
+    controlfolder="$XDG_DATA_HOME/PortMaster"
 else
     controlfolder="/roms/ports/PortMaster"
 fi
@@ -23,14 +26,14 @@ get_controls
 cd "$(dirname "$0")"
 
 # --- Configuration Variables ---
-# The name of the game data folder (e.g., where the 'gamedata' folder lives)
+# The name of the game data folder
 GAMEDIR="./DDLC" 
 RUNTIME="renpy_8.1.3" 
-# The actual script/executable that launches the Ren'Py engine, located next to launch.sh
+# The actual script/executable that launches the Ren'Py engine (sibling to launch.sh)
 GAMELAUNCHER="./DDLC.sh" 
 
 # -----------------------------------------------
-# 2. PATCHING LOGIC (Using $GAMEDIR Prefix)
+# 2. PATCHING LOGIC
 # -----------------------------------------------
 
 # Define patching variables with the $GAMEDIR prefix
@@ -140,7 +143,7 @@ $PATCH
 # 3. RUNTIME & FILE SYSTEM SETUP
 # -----------------------------------------------
 
-# Savedata setup needs the prefix
+# Save data setup needs the prefix
 mkdir -p "$GAMEDIR/conf"
 export XDG_DATA_HOME="$GAMEDIR/conf"
 bind_directories ~/.renpy/ "$GAMEDIR/conf/"
@@ -150,8 +153,18 @@ renpydir="$GAMEDIR/renpy/"
 $ESUDO mkdir -p "$renpydir"
 renpy_runtime="$controlfolder/libs/${RUNTIME}.squashfs"
 
-# ... [Runtime download and mounting logic remains here] ...
+# Check for runtime availability
+if [ ! -f "$renpy_runtime" ]; then
+    pm_message "Downloading Ren'Py runtime..."
+    if [ ! -f "$controlfolder/harbourmaster" ]; then
+        pm_message "This port requires the latest PortMaster to run, please go to https://portmaster.games/ for more info."
+        sleep 5
+        exit 1
+    fi
+    $ESUDO "$controlfolder/harbourmaster" --quiet --no-check runtime_check "${RUNTIME}.squashfs"
+fi
 
+# Mounting Renpy
 pm_message "Mounting Ren'Py runtime..."
 $ESUDO umount "$renpydir" || true
 $ESUDO mount "$renpy_runtime" "$renpydir"
@@ -171,7 +184,7 @@ export LD_LIBRARY_PATH="$GAMEDIR/libs:$LD_LIBRARY_PATH"
 export PYTHONHOME="$GAMEDIR/renpy/"
 export PYTHONPATH="$GAMEDIR/renpy/lib/python3.9"
 
-# If using gl4es (logic remains the same)
+# If using gl4es
 if [ -f "${controlfolder}/libgl_${CFW_NAME}.txt" ]; then
     source "${controlfolder}/libgl_${CFW_NAME}.txt"
 else
@@ -186,10 +199,10 @@ fi
 # Log output
 > "$GAMEDIR/log.txt" && exec > >(tee "$GAMEDIR/log.txt") 2>&1
 
-# Launch the game: 
-# The launcher script/binary is executed from the current directory, 
+# Launch the game: The launcher script/binary is executed from the current directory, 
 # and the full path to the game's data folder ($GAMEDIR) is passed as the argument.
 pm_message "Launching $GAMELAUNCHER with game data at $GAMEDIR..."
+# Assume the executable's startRENPY is inside the $GAMEDIR/renpy/lib path:
 pm_platform_helper "$GAMEDIR/renpy/lib/py3-linux-aarch64/startRENPY"
 $GPTOKEYB "startRENPY" -c "$GAMELAUNCHER" &
 "$GAMELAUNCHER" "$GAMEDIR/game" 
