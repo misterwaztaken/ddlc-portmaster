@@ -6,4 +6,4 @@
 > This is nowhere near finished. Some bugs may prevent you from finishing the game properly.
 
 ## What
-An attempt at porting DDLC to a higher version of Ren'Py, allowing it to run on aarch64
+An attempt at fixing DDLC so it can run on higher versions of Ren'Py, allowing it to run on aarch64
