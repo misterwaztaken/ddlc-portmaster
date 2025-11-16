@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gameList>
+    <game>
+        <path>./launch.sh</path>
+        
+        <name>Doki Doki Literature Club!</name>
+        
+        <desc>A port of the critically acclaimed visual novel by Team Salvato. A psychological horror game disguised as a dating simulator. Requires the original game files to run. This port uses the Python 2 (Ren'Py 6.99.x) runtime.</desc>
+        
+        <releasedate>20171006T000000</releasedate>
+        
+        <developer>Team Salvato</developer>
+        
+        <publisher>Community Port</publisher>
+        
+        <genre>Visual Novel, Horror, Psychological</genre>
+        
+        <rating>M</rating>
+        
+        <image>./image.png</image>
+    </game>
+</gameList>

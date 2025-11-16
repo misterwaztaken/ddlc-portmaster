@@ -1,0 +1,41 @@
+{
+  "version": 4,
+  "name": "DDLC.zip",
+  "items": [
+    "DDLC.sh",
+    "DDLC"
+  ],
+  "items_opt": [],
+  "attr": {
+    "title": "Doki Doki Literature Club!",
+    "porter": [
+      "misterwaztaken"
+    ],
+    "desc": "The well-known psychological horror visual novel.",
+    "desc_md": "\"Will you write the way into her heart?\"\n\nDoki Doki Literature Club! is a psychological horror game developed by Team Salvato in 2017. This port adds patches to the base code to bump compatibility with newer versions of Ren'Py. ",
+    "inst": "Test",
+    "inst_md": "Test",
+    "genres": [
+      "visual novel"
+    ],
+    "image": null,
+    "rtr": false,
+    "exp": true,
+    "runtime": [
+      "renpy_8.3.4.squashfs"
+    ],
+    "store": [
+      {
+        "name": "itch.io",
+        "gameurl": "teamsalvato.itch.io/ddlc",
+        "developerurl": "teamsalvato.itch.io"
+      }
+    ],
+    "availability": "free",
+    "reqs": [],
+    "arch": [
+      "aarch64"
+    ],
+    "min_glibc": ""
+  }
+}
